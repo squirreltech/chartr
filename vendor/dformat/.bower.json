@@ -1,0 +1,14 @@
+{
+  "name": "dformat",
+  "homepage": "https://github.com/benignware-labs/dformat",
+  "_release": "v0.0.1pre",
+  "_resolution": {
+    "type": "tag",
+    "tag": "v0.0.1pre",
+    "commit": "0a72fa1288e97eb8f456f2b4d5d191ef5fb3cbe1"
+  },
+  "_source": "https://github.com/benignware-labs/dformat.git",
+  "_target": "v0.0.1pre",
+  "_originalSource": "https://github.com/benignware-labs/dformat.git",
+  "_direct": true
+}

@@ -1,0 +1,18 @@
+body {
+  padding-top: 20px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+#chart-view {
+  min-height: 420px;
+}
+
+@media screen and (max-width: 1000px) {
+  #chart-view {
+    min-height: 0;
+  }
+}

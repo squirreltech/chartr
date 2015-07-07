@@ -1,0 +1,13 @@
+{
+  "name": "nformat",
+  "homepage": "https://github.com/benignware-labs/nformat",
+  "_release": "v0.0.1pre4",
+  "_resolution": {
+    "type": "tag",
+    "tag": "v0.0.1pre4",
+    "commit": "765f5228f081b6d47322f3ae628b589242341d5e"
+  },
+  "_source": "https://github.com/benignware-labs/nformat.git",
+  "_target": "v0.0.1pre4",
+  "_originalSource": "https://github.com/benignware-labs/nformat.git"
+}

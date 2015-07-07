@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+
+    <title>ChartBuilder</title>
+    
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.0/papaparse.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/css/bootstrap-select.min.css">
+    
+    <link rel="stylesheet" type="text/css" href="http://rawgit.com/kartik-v/bootstrap-fileinput/v4.1.7/css/fileinput.min.css">
+    
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/js/bootstrap-select.min.js"></script>
+    
+    <script src="http://rawgit.com/kartik-v/bootstrap-fileinput/v4.1.7/js/fileinput.min.js"></script>
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.0/papaparse.min.js"></script>
+    <!--
+    <script src="vendor/components/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/components/papa-parse/papaparse.min.js"></script>
+    <script src="vendor/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/components/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="vendor/components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="vendor/components/rgb-color/rgb-color.js"></script>
+    <script src="vendor/components/canvg-gabelerner/canvg.js"></script>
+    
+    <link rel="stylesheet" href="vendor/components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="vendor/components/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="vendor/components/bootstrap-fileinput/css/fileinput.min.css">
+    -->
+    <!--<script src="https://rawgit.com/rexblack/43501728e54245dc5085/raw/cae93ea5ee24c9c8cac60d88b5e969946af3367e/jquery.formopts.js"></script>-->
+    <script src="jquery.formopts.js"></script>
+    
+    <script src="../dist/chartr.min.js"></script>
+    
+    <script src="application.js"></script>
+    <link rel="stylesheet" type="text/css" href="application.css">
+    
+  </head>
+  <body>
+    <div class="container">
+      <nav id="myNavbar" class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+
+            <span class="sr-only">Toggle navigation</span>
+
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+
+          </button>
+
+          <a class="navbar-brand">ChartBuilder</a>
+
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+        </div>
+      </nav>
+    </div>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 sidebar">
+          
+          <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Import</h3></div>
+            <div class="panel-body">
+              <input type="file" name="data-source"/>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Options</h3></div>
+            <div class="panel-body">
+              <form id="chart-options">
+                <div class="form-group">
+                  <label>Title</label>
+                  <input name="title" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Type</label>
+                  <div>
+                    <select name="type">
+                      <option value="line">Line</option>
+                      <option value="pie">Pie</option>
+                      <option value="column">Column</option>
+                      <option value="bar">Bar</option>
+                      <option value="table">Table</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Legend</label>
+                  <div>
+                    <select name="legend">
+                      <option value="top">Top</option>
+                      <option value="right">Right</option>
+                      <!--<option value="bottom">Bottom</option>
+                      <option value="left">Left</option>-->
+                      <option value="none">None</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      
+        <div class="main col-md-8">
+          <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Chart preview</h3></div>
+            <div class="panel-body">
+              <div id="chart-view">
+              </div>
+            </div>
+            <div class="panel-footer clearfix">
+              <form id="embed-options">
+                
+                <div id="output-type" class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-default">
+                    <input type="radio" name="output" value="script" checked="checked"/> Script
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="radio" name="output" value="html"/> HTML
+                  </label>
+                  <!--
+                  <label class="btn btn-default">
+                    <input type="radio" name="output" value="image" /> Image
+                  </label> 
+                  <label class="btn btn-default">
+                    <input type="radio" name="output" value="png" /> PNG
+                  </label>
+                  -->
+                </div>
+                <a class="btn btn-default pull-right" type="button" id="show-embed"><span class="title">Embed</span> <span id="embed-size">0kb</span></a>
+              </form>
+            </div>
+          </div>
+        </div>
+      
+      </div>
+      
+    </div>
+    
+  </body>
+</html>

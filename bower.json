@@ -1,0 +1,9 @@
+{
+  "name": "chartr",
+  "version": "0.0.1",
+  "dependencies": {
+    "visualist": "~0.0.4",
+    "nformat": "https://github.com/benignware-labs/nformat.git#v0.0.1pre4",
+    "dformat": "https://github.com/benignware-labs/dformat.git#v0.0.1pre"
+  }
+}
