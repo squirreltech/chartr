@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
+    <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/richleland/pygments-css/master/github.css">
+    <title>chartr</title>
+    <style>
+    
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+          
+      .highlight-example:after {
+        color: #959595;
+        content: "Example";
+        font-size: 12px;
+        font-weight: 700;
+        left: 15px;
+        letter-spacing: 1px;
+        position: absolute;
+        text-transform: uppercase;
+        top: 15px;
+      }
+      
+      .highlight-example {
+        border-color: #e5e5e5 #eee #eee;
+        border-style: solid;
+        border-width: 1px 0;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05) inset;
+        margin: 0 -15px 15px;
+        padding: 45px 15px 15px;
+        position: relative;
+      }
+      
+      .highlight-example {
+        background-color: #fff;
+        border-color: #ddd;
+        border-radius: 4px 4px 0 0;
+        border-width: 1px;
+        box-shadow: none;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      .highlight-example + .highlight {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-width: 1px;
+        margin: -16px 0 15px;
+        border-width: 1px;
+      }
+
+      .highlight {
+        background-color: #f7f7f9;
+        border: 1px solid #e1e1e8;
+        border-radius: 4px;
+        margin-bottom: 14px;
+        padding: 0;
+      }
+
+      .highlight pre {
+        background-color: transparent;
+        border: 0 none;
+        margin-bottom: 0;
+        margin-top: 0;
+        padding: 0;
+      }
+      
+      article.markdown-body {
+        max-width: 728px;
+        margin: 50px auto;
+      }
+      
+      body > footer {
+        border-top: 1px solid #eee;
+        color: #767676;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-top: 40px;
+        padding-bottom: 40px;
+        padding-top: 40px;
+        position: relative;
+        max-width: 728px;
+        margin: 50px auto;
+      }
+      
+      body > footer > * {
+        float: left;
+        line-height: 16px;
+        font-size: 12px;
+      }
+      body > footer > *:last-child {
+        float: right;
+      }
+      
+      body > footer > nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      body > footer > nav ul li {
+        display: inline-block;
+      }
+      
+      body > footer > nav ul li + li {
+        margin-left: 10px;
+      }
+      
+      a {
+        color: #4078c0;
+        text-decoration: none;
+      }
+      
+    </style>
+  </head>
+  <body>
+    
+    <a href="https://github.com/squirreltech/chartr"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+    
+    <article class="markdown-body"><h1 id="chartr">Chartr</h1>
+<blockquote>
+<p>Lightweight SVG Chart Library</p>
+</blockquote>
+<ul>
+<li>Renders slim and embedabble SVG-Code </li>
+<li>Supports standard CSV array as input data</li>
+<li>Column types and locale format patterns are automatically detected and parsed from input data</li>
+<li>Less configuration, more fun!</li>
+</ul>
+<p><a href="http://squirrel.github.io/chartr">Demo</a></p>
+<h2 id="usage">Usage</h2>
+<p>Include the library</p>
+<div><script src="chartr.js"></script>
+</div>
+
+
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;chartr.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<h3 id="piechart">PieChart</h3>
+<div class="highlight-example">
+<div class="piechart"></div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;piechart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<script>chartr('.piechart', {
+  type: 'pie',
+  title: 'Junk Food',
+  data: [
+    ['Pizza', 'Burger', 'Hot Dog'],
+    ['46%', '39%', '28%']
+  ]
+})
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.piechart&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Junk Food&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Pizza&#39;</span><span class="p">,</span> <span class="s1">&#39;Burger&#39;</span><span class="p">,</span> <span class="s1">&#39;Hot Dog&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;46%&#39;</span><span class="p">,</span> <span class="s1">&#39;39%&#39;</span><span class="p">,</span> <span class="s1">&#39;28%&#39;</span><span class="p">]</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+<h3 id="columnchart">ColumnChart</h3>
+<div class="highlight-example">
+<div class="columnchart"></div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;columnchart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<script>chartr('.columnchart', {
+  type: 'column',
+  title: 'Junk Food',
+  data: [
+    ['Pizza', '46%'],
+    ['Burger', '38%'],
+    ['Hot Dog', '-14%']
+  ]
+})
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.columnchart&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;column&#39;</span><span class="p">,</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Junk Food&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Pizza&#39;</span><span class="p">,</span> <span class="s1">&#39;46%&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Burger&#39;</span><span class="p">,</span> <span class="s1">&#39;38%&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Hot Dog&#39;</span><span class="p">,</span> <span class="s1">&#39;-14%&#39;</span><span class="p">]</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+<h3 id="barchart">BarChart</h3>
+<div class="highlight-example">
+<div class="barchart"></div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;barchart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<script>chartr('.barchart', {
+  type: 'bar',
+  title: 'Junk Food',
+  data: [
+    ['Pizza', '46%'],
+    ['Burger', '38%'],
+    ['Hot Dog', '-14%']
+  ]
+})
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.barchart&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Junk Food&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Pizza&#39;</span><span class="p">,</span> <span class="s1">&#39;46%&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Burger&#39;</span><span class="p">,</span> <span class="s1">&#39;38%&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Hot Dog&#39;</span><span class="p">,</span> <span class="s1">&#39;-14%&#39;</span><span class="p">]</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+<h3 id="linechart">LineChart</h3>
+<div class="highlight-example">
+<div class="linechart"></div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;linechart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<script>chartr('.linechart', {
+  type: 'line',
+  title: 'Junk Food',
+  legend: 'right',
+  smooth: true,
+  data: [
+    ['Date', 'Pizza', 'Burger', 'Hot Dog'],
+    ['April 2012', '20,030.32', '39,321.78', '54,179.12'],
+    ['September 2012', '22,991.12', '32,754.32', '51,912.54'],
+    ['January 2013', '28,298.67', '30,202.91', '47,874.08'],
+    ['June 2013', '34,781.27', '22,661.13', '41,129.76'],
+    ['March 2014', '39,122.88', '18,783.44', '46,957.54'],
+    ['July 2015', '47,876.31', '16,121.98', '51,076.13'],
+  ]
+})
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.linechart&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;line&#39;</span><span class="p">,</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Junk Food&#39;</span><span class="p">,</span>
+  <span class="nx">legend</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
+  <span class="nx">smooth</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;Pizza&#39;</span><span class="p">,</span> <span class="s1">&#39;Burger&#39;</span><span class="p">,</span> <span class="s1">&#39;Hot Dog&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;April 2012&#39;</span><span class="p">,</span> <span class="s1">&#39;20,030.32&#39;</span><span class="p">,</span> <span class="s1">&#39;39,321.78&#39;</span><span class="p">,</span> <span class="s1">&#39;54,179.12&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;September 2012&#39;</span><span class="p">,</span> <span class="s1">&#39;22,991.12&#39;</span><span class="p">,</span> <span class="s1">&#39;32,754.32&#39;</span><span class="p">,</span> <span class="s1">&#39;51,912.54&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;January 2013&#39;</span><span class="p">,</span> <span class="s1">&#39;28,298.67&#39;</span><span class="p">,</span> <span class="s1">&#39;30,202.91&#39;</span><span class="p">,</span> <span class="s1">&#39;47,874.08&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;June 2013&#39;</span><span class="p">,</span> <span class="s1">&#39;34,781.27&#39;</span><span class="p">,</span> <span class="s1">&#39;22,661.13&#39;</span><span class="p">,</span> <span class="s1">&#39;41,129.76&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;March 2014&#39;</span><span class="p">,</span> <span class="s1">&#39;39,122.88&#39;</span><span class="p">,</span> <span class="s1">&#39;18,783.44&#39;</span><span class="p">,</span> <span class="s1">&#39;46,957.54&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;July 2015&#39;</span><span class="p">,</span> <span class="s1">&#39;47,876.31&#39;</span><span class="p">,</span> <span class="s1">&#39;16,121.98&#39;</span><span class="p">,</span> <span class="s1">&#39;51,076.13&#39;</span><span class="p">],</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+<h3 id="tablechart">TableChart</h3>
+<div class="highlight-example">
+<div class="tablechart"></div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tablechart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<script>chartr('.tablechart', {
+  type: 'table',
+  title: 'Junk Food',
+  data: [
+    ['Date', 'Pizza', 'Burger', 'Hot Dog'],
+    ['April 2012', '20,030.32', '39,321.78', '54,179.12'],
+    ['September 2012', '22,991.12', '32,754.32', '51,912.54'],
+    ['January 2013', '28,298.67', '30,202.91', '47,874.08'],
+    ['June 2013', '34,781.27', '22,661.13', '41,129.76'],
+    ['March 2014', '39,122.88', '18,783.44', '46,957.54'],
+    ['July 2015', '47,876.31', '16,121.98', '51,076.13'],
+  ]
+})
+</script>
+
+
+
+<div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.tablechart&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;table&#39;</span><span class="p">,</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Junk Food&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;Pizza&#39;</span><span class="p">,</span> <span class="s1">&#39;Burger&#39;</span><span class="p">,</span> <span class="s1">&#39;Hot Dog&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;April 2012&#39;</span><span class="p">,</span> <span class="s1">&#39;20,030.32&#39;</span><span class="p">,</span> <span class="s1">&#39;39,321.78&#39;</span><span class="p">,</span> <span class="s1">&#39;54,179.12&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;September 2012&#39;</span><span class="p">,</span> <span class="s1">&#39;22,991.12&#39;</span><span class="p">,</span> <span class="s1">&#39;32,754.32&#39;</span><span class="p">,</span> <span class="s1">&#39;51,912.54&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;January 2013&#39;</span><span class="p">,</span> <span class="s1">&#39;28,298.67&#39;</span><span class="p">,</span> <span class="s1">&#39;30,202.91&#39;</span><span class="p">,</span> <span class="s1">&#39;47,874.08&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;June 2013&#39;</span><span class="p">,</span> <span class="s1">&#39;34,781.27&#39;</span><span class="p">,</span> <span class="s1">&#39;22,661.13&#39;</span><span class="p">,</span> <span class="s1">&#39;41,129.76&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;March 2014&#39;</span><span class="p">,</span> <span class="s1">&#39;39,122.88&#39;</span><span class="p">,</span> <span class="s1">&#39;18,783.44&#39;</span><span class="p">,</span> <span class="s1">&#39;46,957.54&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;July 2015&#39;</span><span class="p">,</span> <span class="s1">&#39;47,876.31&#39;</span><span class="p">,</span> <span class="s1">&#39;16,121.98&#39;</span><span class="p">,</span> <span class="s1">&#39;51,076.13&#39;</span><span class="p">],</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</article>
+    <footer>
+      <div class="disclaimer">
+        
+           &copy; 2015
+          
+            <a href="https://github.com/benignware">
+          
+            Benignware
+          
+            </a>
+          
+        
+      </div>
+      <nav>
+        <ul>
+          
+            <li>v0.0.1</li>
+          
+          
+            <li><a href="https://github.com/squirreltech/chartr/archive/v0.0.1.zip">Download</a></li>
+          
+          
+            <li><a href="https://github.com/squirreltech/chartr/issues">Bugs</a></li>
+          
+        </ul>
+      </nav>
+      
+    </footer>
+  </body>
+</html>
