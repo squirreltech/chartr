@@ -7,7 +7,7 @@
 * Column types and locale format patterns are automatically detected and parsed from input data
 * Less configuration, more fun!
 
-[Demo](http://squirrel.github.io/chartr)
+[Demo](http://squirreltech.github.io/chartr)
 
 ## Usage
 

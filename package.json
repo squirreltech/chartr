@@ -2,11 +2,11 @@
   "name": "chartr",
   "description": "Lightweight SVG Chart Library",
   "version": "0.0.1",
+  "homepage": "http://squirreltech.github.io/chartr",
   "repository": {
     "type": "git",
     "url": "git://github.com/squirreltech/chartr.git"
   },
-  "homepage": "http://squirreltech.github.io/chartr",
   "author": {
     "name": "Benignware",
     "email": "mail@benignware.com",
