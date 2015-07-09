@@ -4,6 +4,8 @@
     <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
     <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/richleland/pygments-css/master/github.css">
     <title>chartr</title>
+    <meta charset="UTF-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
     
       body {
@@ -114,11 +116,18 @@
         text-decoration: none;
       }
       
+      img[style*='fixed'] {
+        z-index: 10;
+      }
+      
     </style>
   </head>
   <body>
     
-    <a href="https://github.com/squirreltech/chartr"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+    <a href="https://github.com/squirreltech/chartr">
+      <!-- github badge -->
+      <img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png">
+    </a>
     
     <article class="markdown-body"><h1 id="chartr">Chartr</h1>
 <blockquote>
@@ -147,16 +156,16 @@
 
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;piechart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
-<script>chartr('.piechart', {
+<script>
+try { chartr('.piechart', {
   type: 'pie',
   title: 'Junk Food',
   data: [
     ['Pizza', 'Burger', 'Hot Dog'],
     ['46%', '39%', '28%']
   ]
-})
+})} catch (e) {}
 </script>
-
 
 
 <div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.piechart&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -176,7 +185,8 @@
 
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;columnchart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
-<script>chartr('.columnchart', {
+<script>
+try { chartr('.columnchart', {
   type: 'column',
   title: 'Junk Food',
   data: [
@@ -184,9 +194,8 @@
     ['Burger', '38%'],
     ['Hot Dog', '-14%']
   ]
-})
+})} catch (e) {}
 </script>
-
 
 
 <div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.columnchart&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -207,7 +216,8 @@
 
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;barchart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
-<script>chartr('.barchart', {
+<script>
+try { chartr('.barchart', {
   type: 'bar',
   title: 'Junk Food',
   data: [
@@ -215,9 +225,8 @@
     ['Burger', '38%'],
     ['Hot Dog', '-14%']
   ]
-})
+})} catch (e) {}
 </script>
-
 
 
 <div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.barchart&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -238,7 +247,8 @@
 
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;linechart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
-<script>chartr('.linechart', {
+<script>
+try { chartr('.linechart', {
   type: 'line',
   title: 'Junk Food',
   legend: 'right',
@@ -252,9 +262,8 @@
     ['March 2014', '39,122.88', '18,783.44', '46,957.54'],
     ['July 2015', '47,876.31', '16,121.98', '51,076.13'],
   ]
-})
+})} catch (e) {}
 </script>
-
 
 
 <div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.linechart&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -281,7 +290,8 @@
 
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tablechart&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
-<script>chartr('.tablechart', {
+<script>
+try { chartr('.tablechart', {
   type: 'table',
   title: 'Junk Food',
   data: [
@@ -293,9 +303,8 @@
     ['March 2014', '39,122.88', '18,783.44', '46,957.54'],
     ['July 2015', '47,876.31', '16,121.98', '51,076.13'],
   ]
-})
+})} catch (e) {}
 </script>
-
 
 
 <div class="highlight"><pre><span class="nx">chartr</span><span class="p">(</span><span class="s1">&#39;.tablechart&#39;</span><span class="p">,</span> <span class="p">{</span>
