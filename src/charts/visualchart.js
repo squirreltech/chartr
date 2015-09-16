@@ -14,7 +14,8 @@ _v.extend(VisualChart.prototype, {
   
   defaults: _v.extend(true, {}, BaseChart.prototype.defaults, {
     //colors: ['navy', 'maroon', 'olive', 'teal', 'brown', 'green', 'blue', 'purple', 'orange', 'violet', 'cyan', 'fuchsia', 'yellow', 'lime', 'aqua', 'red'],
-    colors: "#287CCE,#963A74,#48E387,#E5A069,#50F2F7,#F55A44,#737373".split(/[\s,]+/),
+    //colors: "#287CCE,#963A74,#48E387,#E5A069,#50F2F7,#F55A44,#737373".split(/[\s,]+/),
+    colors: "#2362c5,#ff7518,#12c0a3,#c7daf8,#ffd118,#f51731,#8Af46c,#C5138B".split(/[\s,]+/),
     legend: 'top'
   }),
   
