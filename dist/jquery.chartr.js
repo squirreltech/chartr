@@ -932,7 +932,9 @@ _v.extend(LineChart.prototype, {
             x = Math.round(xv * chartBox.width);
             y = Math.round(chartBox.height - yv * chartBox.height);
             
-            points.push({x: x, y: y});
+            if (x >= 0 && x <= chartBox.width && y >= 0 && y <= chartBox.height) {
+              points.push({x: x, y: y});
+            }
           }
         }
         
