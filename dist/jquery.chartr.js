@@ -975,6 +975,7 @@ _v.extend(PieChart.prototype, {
     var
       labelFontSize = 11,
       labelDistance = labelFontSize + labelFontSize * 0.75,
+      minPercent = 0.04,
       options = this.options,
       elem = this.element,
       dataTable = this.dataTable,
@@ -1004,6 +1005,7 @@ _v.extend(PieChart.prototype, {
       r = (Math.min(chartBox.width, chartBox.height) - padding * 2 ) / 2,
       x = chartBox.width / 2 - r,
       p = 0,
+      pv,
       g,
       a,
       ax,
@@ -1054,18 +1056,22 @@ _v.extend(PieChart.prototype, {
       
       // Render pie
       sAngle = p * Math.PI * 2 - Math.PI / 2;
-      p = pie.p = p + pie.v / total;
+      
+      pv = pie.v / total;
+      p = pie.p = p + pv;
       
       eAngle = p * Math.PI * 2 - Math.PI / 2;
       
       chartLayer.g({fill: options.colors[index % options.colors.length]}).arc(x + r, y + r, r, sAngle, eAngle, 1);
-      
+
       // Render label
-      a = sAngle + (eAngle - sAngle) / 2;
-      ax = r + Math.cos(a) * (r + labelDistance);
-      ay = r + Math.sin(a) * (r + labelDistance);
+      if (pv >= minPercent) {
+        a = sAngle + (eAngle - sAngle) / 2;
+        ax = r + Math.cos(a) * (r + labelDistance);
+        ay = r + Math.sin(a) * (r + labelDistance);
+        gridLayer.text(x + ax, y + ay, pie.f, {textAnchor: 'middle', dx: '0.1em', dy: '0.7em'});
+      }
       
-      gridLayer.text(x + ax, y + ay, pie.f, {textAnchor: 'middle', dx: '0.1em', dy: '0.7em'});
       
     }
     
