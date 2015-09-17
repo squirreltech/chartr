@@ -53,6 +53,7 @@ _v.extend(ColumnChart.prototype, {
    
     var sum = {};
     var count = 0;
+    var colorIndex = 0;
     
     graphLayer = chartLayer.g({
       fill: options.colors[valueIndex % options.colors.length]
@@ -68,7 +69,7 @@ _v.extend(ColumnChart.prototype, {
       for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
         
         if (columnIndex !== categoryIndex) {
-          
+          colorIndex++;
           categoryValue = categoryType === 'string' ? rowIndex : rows[rowIndex][categoryIndex];
           normalizedCategoryValue = (categoryValue - categoryMin) / ( categoryMax - categoryMin);
       
@@ -140,8 +141,7 @@ _v.extend(ColumnChart.prototype, {
               y1 = Math.round(y),
               x2 = Math.round(x) + Math.round(w),
               y2 = Math.round(y) + Math.round(h);
-            
-            graphLayer.path('M' + x1 +',' + y1 + ' ' + x2 + ',' + y1 + ' ' + x2 + ',' + y2 + ' ' + x1 + ',' + y2);
+            graphLayer.path('M' + x1 +',' + y1 + ' ' + x2 + ',' + y1 + ' ' + x2 + ',' + y2 + ' ' + x1 + ',' + y2, {fill: options.colors[colorIndex % options.colors.length]});
             
             //graphLayer.circle(x1, y1, 10, {fill: 'red'});
             
