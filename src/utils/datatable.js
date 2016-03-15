@@ -34,18 +34,21 @@ function DataTable(data) {
   };
   
   this.getColumnRange = function(columnIndex, rowIndexStart, rowIndexEnd) {
+    var columnIndices = columnIndex instanceof Array ? columnIndex : [columnIndex];
     if (this.getColumnType(columnIndex) === 'string') {
       return {min: this.getValue(0, columnIndex), max: this.getValue(this.getNumberOfRows() - 1, columnIndex)};
     }
     rowIndexStart = rowIndexStart ? rowIndexStart : 0;
     rowIndexEnd = rowIndexEnd ? rowIndexEnd : this.getNumberOfRows() - 1;
-    var value, min = null, max = null;
+    var dataTable = this, value, min = null, max = null;
     for (rowIndex = rowIndexStart; rowIndex <= rowIndexEnd; rowIndex++) {
-      value = this.getValue(rowIndex, columnIndex);
-      if (typeof value !== 'undefined' && value !== null && value.valueOf && (typeof value !== 'string' || value)) {
-        min = min === null || value.valueOf() < min.valueOf() ? value : min;
-        max = max === null || value.valueOf() > max.valueOf() ? value : max;
-      }
+      columnIndices.forEach(function(columnIndex) {
+        value = dataTable.getValue(rowIndex, columnIndex);
+        if (typeof value !== 'undefined' && value !== null && value.valueOf && (typeof value !== 'string' || value)) {
+          min = min === null || value.valueOf() < min.valueOf() ? value : min;
+          max = max === null || value.valueOf() > max.valueOf() ? value : max;
+        }
+      });
     }
     return {min: min, max: max};
   };

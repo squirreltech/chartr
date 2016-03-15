@@ -1,5 +1,7 @@
 body {
   padding-top: 20px;
+  /* FIXME: Apply custom text color */
+  /*color: #111;*/
 }
 
 img {

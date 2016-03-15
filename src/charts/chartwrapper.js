@@ -1,10 +1,12 @@
-var _v = require("../../vendor/visualist/src/visualist");
-var DataTable = require("../utils/datatable");
-var LineChart = require('./linechart');
-var PieChart = require('./piechart');
-var ColumnChart = require('./columnchart');
-var BarChart = require('./barchart');
-var TableChart = require('./tablechart');
+var
+  _v = require("../../vendor/visualist/src/visualist"),
+  DataTable = require("../utils/datatable"),
+  LineChart = require('./linechart'),
+  PieChart = require('./piechart'),
+  ColumnChart = require('./columnchart'),
+  StackedColumnChart = require('./stackedcolumnchart'),
+  BarChart = require('./barchart'),
+  TableChart = require('./tablechart');
 
 function getChartType(dataTable) {
   
@@ -30,6 +32,8 @@ function getChartClass(type) {
     case 'bar':
       clazz = BarChart;
       break;
+    case 'stackedcolumn':
+      clazz = StackedColumnChart;
       break;
     default:
       clazz = TableChart;

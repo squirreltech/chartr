@@ -1,13 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*module.exports = {
-  PieChart: require('./charts/piechart'),
-  LineChart: require('./charts/linechart'),
-  ColumnChart: require('./charts/columnchart'),
-  VisualChart: require('./charts/visualchart'),
-  CartesianChart: require('./charts/cartesianchart'),
-  ChartWrapper: require('./charts/chartwrapper')
-};*/
-
 var ChartWrapper = require('./charts/chartwrapper');
 module.exports = function(element, options) {
   return new ChartWrapper(element, options);
@@ -94,7 +85,6 @@ _v.extend(CartesianChart.prototype, {
     categoryTicks.forEach(function(tick, index) {
       var tickColor = categoryType === 'number' && tick === 0 ? 0.75 : 0.25;
       var tickWidth = (flipAxes ? ch : cw) / (categoryTicks.length);
-      
       var normalizedCategoryValue = (tick - categoryMin) / (categoryMax - categoryMin);
       
       var x1;
@@ -238,8 +228,8 @@ _v.extend(CartesianChart.prototype, {
       var textAnchor = flipAxes ? 'middle' : 'end'; 
       
       var text = gridLayer.create("text", {
-        x: Math.round(labelX), 
-        y: Math.round(labelY),
+        x: labelX, 
+        y: labelY,
         dy: "0.4em",
         textAnchor: textAnchor
       }).append(document.createTextNode(label));
@@ -321,14 +311,21 @@ Object.defineProperties(CartesianChart.prototype, {
     configurable: true,
     get: function() {
       var
+        maxCount = 10;
         range = this.categoryRange,
         type = this.categoryType,
         min = range.min,
         max = range.max,
-        count = Math.min(10, this.dataTable.getNumberOfRows()),
+        count = Math.min(maxCount, this.dataTable.getNumberOfRows()),
         outer = false;
-      if (type === 'number') {
-        return nticks(min, max, count, outer);
+      if (type === 'number' && this.dataTable.getNumberOfRows() < maxCount) {
+        var ticks = [];
+        var rows = this.dataTable.getNumberOfRows();
+        for (var i = 0; i < rows; i++) {
+          var value = this.dataTable.getValue(i, this.categoryIndex);
+          ticks.push(value);
+        };
+        return ticks;
       } else if (type === 'date') {
         return dticks(min, max, count, outer);
       } else if (type === 'string') {
@@ -336,7 +333,9 @@ Object.defineProperties(CartesianChart.prototype, {
         return (Array.apply(null, {length: this.dataTable.getNumberOfRows()}).map(Number.call, Number)).map(function(tick) {
           return Math.floor(tick);
         });
-      }
+      } else if (type === 'number') {
+        return nticks(min, max, count, outer);
+      } 
     }
   },
   valueRange: {
@@ -351,11 +350,25 @@ Object.defineProperties(CartesianChart.prototype, {
         categoryIndex = this.categoryIndex,
         range;
       if (dataTable) {
+        return dataTable.getColumnRange(this.valueIndices);
+      }
+      return null;
+    }
+  },
+  valueIndices: {
+    get: function() {
+      if (!this.dataTable) {
+        return;
+      }
+      var
+        dataTable = this.dataTable,
+        result = [],
+        columnIndex,
+        categoryIndex = this.categoryIndex;
+      if (dataTable) {
         for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
           if (columnIndex !== categoryIndex) {
-            range = dataTable.getColumnRange(columnIndex);
-            result.min = typeof result.min === 'undefined' ? range.min : Math.min(result.min, range.min);
-            result.max = typeof result.max === 'undefined' ? range.max : Math.max(result.max, range.max);
+            result.push(columnIndex);
           }
         };
       }
@@ -487,7 +500,7 @@ Object.defineProperties(CartesianChart.prototype, {
 });
 
 module.exports = CartesianChart;
-},{"../../vendor/dformat/src/dformat":17,"../../vendor/nformat/src/nformat":20,"../../vendor/visualist/src/visualist":21,"../utils/dticks":14,"../utils/nticks":15,"./visualchart":11}],3:[function(require,module,exports){
+},{"../../vendor/dformat/src/dformat":19,"../../vendor/nformat/src/nformat":22,"../../vendor/visualist/src/visualist":23,"../utils/dticks":15,"../utils/nticks":17,"./visualchart":12}],3:[function(require,module,exports){
 var _v = require("../../vendor/visualist/src/visualist");
 var nticks = require("../utils/nticks");
 var dticks = require("../utils/dticks");
@@ -511,7 +524,7 @@ Object.defineProperties(BarChart.prototype, {
 });
 
 module.exports = BarChart;
-},{"../../vendor/visualist/src/visualist":21,"../utils/dticks":14,"../utils/nticks":15,"./columnchart":7}],4:[function(require,module,exports){
+},{"../../vendor/visualist/src/visualist":23,"../utils/dticks":15,"../utils/nticks":17,"./columnchart":7}],4:[function(require,module,exports){
 var DataTable = require("../utils/datatable");
 var _v = require("../../vendor/visualist/src/visualist");
 
@@ -581,16 +594,18 @@ _v.extend(BaseChart.prototype, {
 
   
 module.exports = BaseChart;
-},{"../../vendor/visualist/src/visualist":21,"../utils/datatable":13}],5:[function(require,module,exports){
+},{"../../vendor/visualist/src/visualist":23,"../utils/datatable":14}],5:[function(require,module,exports){
 arguments[4][2][0].apply(exports,arguments)
-},{"../../vendor/dformat/src/dformat":17,"../../vendor/nformat/src/nformat":20,"../../vendor/visualist/src/visualist":21,"../utils/dticks":14,"../utils/nticks":15,"./visualchart":11,"dup":2}],6:[function(require,module,exports){
-var _v = require("../../vendor/visualist/src/visualist");
-var DataTable = require("../utils/datatable");
-var LineChart = require('./linechart');
-var PieChart = require('./piechart');
-var ColumnChart = require('./columnchart');
-var BarChart = require('./barchart');
-var TableChart = require('./tablechart');
+},{"../../vendor/dformat/src/dformat":19,"../../vendor/nformat/src/nformat":22,"../../vendor/visualist/src/visualist":23,"../utils/dticks":15,"../utils/nticks":17,"./visualchart":12,"dup":2}],6:[function(require,module,exports){
+var
+  _v = require("../../vendor/visualist/src/visualist"),
+  DataTable = require("../utils/datatable"),
+  LineChart = require('./linechart'),
+  PieChart = require('./piechart'),
+  ColumnChart = require('./columnchart'),
+  StackedColumnChart = require('./stackedcolumnchart'),
+  BarChart = require('./barchart'),
+  TableChart = require('./tablechart');
 
 function getChartType(dataTable) {
   
@@ -616,6 +631,8 @@ function getChartClass(type) {
     case 'bar':
       clazz = BarChart;
       break;
+    case 'stackedcolumn':
+      clazz = StackedColumnChart;
       break;
     default:
       clazz = TableChart;
@@ -680,11 +697,14 @@ Object.defineProperties(ChartWrapper.prototype, {
 });
 
 module.exports = ChartWrapper;
-},{"../../vendor/visualist/src/visualist":21,"../utils/datatable":13,"./barchart":3,"./columnchart":7,"./linechart":8,"./piechart":9,"./tablechart":10}],7:[function(require,module,exports){
-var _v = require("../../vendor/visualist/src/visualist");
-var nticks = require("../utils/nticks");
-var dticks = require("../utils/dticks");
-var CartesianChart = require('./cartesianchart');
+},{"../../vendor/visualist/src/visualist":23,"../utils/datatable":14,"./barchart":3,"./columnchart":7,"./linechart":8,"./piechart":9,"./stackedcolumnchart":10,"./tablechart":11}],7:[function(require,module,exports){
+var
+  _v = require("../../vendor/visualist/src/visualist"),
+  nticks = require("../utils/nticks"),
+  dticks = require("../utils/dticks"),
+  luma = require("../utils/luma"),
+  nformat = require("../../vendor/nformat/src/nformat"),
+  CartesianChart = require('./cartesianchart');
 
 function ColumnChart() {
   CartesianChart.apply(this, arguments);
@@ -697,8 +717,9 @@ _v.extend(ColumnChart.prototype, {
   }),
   render: function() {
     CartesianChart.prototype.render.apply(this, arguments);
-    
     var
+      _this = this,
+      stacked = this.stacked,
       dataTable = this.dataTable,
       options = this.options,
       chartLayer = this.chartLayer,
@@ -707,7 +728,10 @@ _v.extend(ColumnChart.prototype, {
       rowIndex = 0,
       valueIndex = 0,
       valueRange = this.valueRange,
+      //valueRange = dataTable.getColumnRange(this.valueIndices),
       valueTicks = this.valueTicks,
+      valueMin = valueRange.min,
+      valueMax = valueRange.max,
       valueMin = Math.min(valueRange.min, valueTicks[0]),
       valueMax = Math.max(valueRange.max, valueTicks[valueTicks.length - 1]),
       categoryType = this.categoryType,
@@ -730,57 +754,87 @@ _v.extend(ColumnChart.prototype, {
     
     var rectWidth = chartBox.width / (dataTable.getNumberOfColumns() - 1);
     var tickWidth = (flipAxes ? chartBox.height : chartBox.width) / rows.length; 
-    var columnWidth = Math.max(1, tickWidth / dataTable.getNumberOfColumns());
-    var columnSpacing = columnWidth * 0.25;
+    
+    var columnWidth = Math.min(50, stacked || this.valueIndices.length <= 1 ? tickWidth : Math.max(1, tickWidth / dataTable.getNumberOfColumns()));
+    
     var m = 1;
    
-    var sum = {};
-    var count = 0;
+    var currentNumberOfRows = 0;
+    var currentTotals = [];
 
     graphLayer = chartLayer.g({
-      fill: options.colors[valueIndex % options.colors.length]
+      //fill: options.colors[valueIndex % options.colors.length]
     });
     
+    var normalizedValueZero = 0;
+    if (valueMin < 0 && valueMax > 0) {
+      normalizedValueZero = (0 - valueMin) / (valueMax - valueMin);
+    }
+    
+    var normalizedCategoryZero = 0;
+    if (categoryMin < 0 && categoryMax > 0) {
+      normalizedCategoryZero = (0 - categoryMin) / (categoryMax - categoryMin);
+    }
+    
     for (rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-      count++;
+      currentNumberOfRows++;
       var step = rowIndex % m === 0;
-      var valueIndex = 0;
       
+      // Loop through columns and add values to totals
       for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
         
         if (columnIndex !== categoryIndex) {
           
-          categoryValue = categoryType === 'string' ? rowIndex : rows[rowIndex][categoryIndex];
-          normalizedCategoryValue = (categoryValue - categoryMin) / ( categoryMax - categoryMin);
-      
-          //
-          points = [];
           var value = rows[rowIndex][columnIndex];
+          currentTotals[columnIndex] = currentTotals[columnIndex] || 0;
+          if (!isNaN(parseInt(value))) {
+            currentTotals[columnIndex]+= value;
+          }
+        }
+      }
+      
+      if (step) {
+        
+        // Actually render this step by taking average values of passed rows
+        var posRowTotal = 0;
+        var negRowTotal = 0;
+        // Positive and negative sums of currently rendered columns in pixels
+        var ysp = 0;
+        var ysn = 0;
+      
+        for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
+        
+          if (columnIndex !== categoryIndex) {
+            
+            var value = currentTotals[columnIndex] / currentNumberOfRows;
+            if (value >= 0) {
+              posRowTotal+= value;
+            } else {
+              negRowTotal+= Math.abs(value);
+            }
+            
+          }
+        }
+        
+        var prv = (posRowTotal - valueMin) / (valueMax - valueMin);
+        var nrv = (-negRowTotal - valueMin) / (valueMax - valueMin);
+        
+        var valueIndex = 0;
+        
+        categoryValue = categoryType === 'string' ? rowIndex : rows[rowIndex][categoryIndex];
+        normalizedCategoryValue = (categoryValue - categoryMin) / ( categoryMax - categoryMin);
+      
+        // Loop through columns
+        for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
           
-          sum[columnIndex] = sum[columnIndex] || 0;
-          sum[columnIndex]+= value;
-          
-          if (step) {
+          if (columnIndex !== categoryIndex) {
+            
+            points = [];
+            var value = currentTotals[columnIndex] / currentNumberOfRows;
+            
+            var w = columnWidth;
             
             normalizedValue = (value - valueMin) / (valueMax - valueMin);
-            
-            var normalizedValueZero = 0;
-            if (valueMin < 0 && valueMax > 0) {
-              normalizedValueZero = (0 - valueMin) / (valueMax - valueMin);
-            }
-            
-            var normalizedCategoryZero = 0;
-            if (categoryMin < 0 && categoryMax > 0) {
-              normalizedCategoryZero = (0 - categoryMin) / (categoryMax - categoryMin);
-            }
-            
-            var w = Math.max(1, columnWidth);
-            
-            /*var xv = flipAxes ? normalizedValue : normalizedCategoryValue;
-            var yv = flipAxes ? normalizedCategoryValue : normalizedValue;
-            
-            var zv = flipAxes ? normalizedCategoryZero : normalizedValueZero;
-            */
             
             var xv = normalizedCategoryValue;
             var yv = normalizedValue;
@@ -789,61 +843,93 @@ _v.extend(ColumnChart.prototype, {
             var cw = flipAxes ? chartBox.width : chartBox.width - tickWidth;
             var ch = flipAxes ? chartBox.height - tickWidth : chartBox.height;
             
-            var o = columnWidth / 2 + valueIndex * columnWidth;
-            
+            // Calculate column offset
+            var o = (stacked || this.valueIndices.length <= 1 ? (tickWidth - columnWidth) / 2 : columnWidth / 2 + valueIndex * columnWidth);
             var ox = flipAxes ? 0 : o;
             var oy = flipAxes ? o : 0;
-            /*
-            x = xv * cw + ox;
-            y = yv * ch + oy;
-            */
+
             var x = xv * cw + ox;
             var y = ch - yv * ch + oy;
+            
+            var hv = zv - yv;
            
-            var h = yv * ch;
-           
-            //if (value < 0) {
-              y = ch - zv * ch;
-              h = (zv - yv) * ch;
-            /*} else if (value >= 0) {
-              h = h - zv * ch;
-            }*/
-           
+            var sv = zv;
+            if (stacked) {
+              if (value >= 0) {
+                sv = prv + hv + ysp;
+              } else {
+                sv = zv - ysn;
+              }
+            }
+            
+            y = ch - sv * ch;
+            h = hv * ch;
+            
+            if (value >= 0) {
+              ysp+= hv;
+            } else {
+              ysn+= hv;
+            }
+
             if (flipAxes) {
               h = w;
-              w = (yv - zv) * cw;
+              w = (yv - sv) * cw;
               x = zv * cw;
               y = xv * ch + oy;
             }
 
             var 
-              x1 = Math.round(x),
-              y1 = Math.round(y),
-              x2 = Math.round(x) + Math.round(w),
-              y2 = Math.round(y) + Math.round(h);
+              x1 = x,
+              y1 = y,
+              x2 = x + w,
+              y2 = y + h,
+              fill = options.colors[valueIndex % options.colors.length],
+              textColor;
               
-            graphLayer.path('M' + x1 +',' + y1 + ' ' + x2 + ',' + y1 + ' ' + x2 + ',' + y2 + ' ' + x1 + ',' + y2, {fill: options.colors[valueIndex % options.colors.length]});
+            graphLayer.path('M' + x1 +',' + y1 + ' ' + x2 + ',' + y1 + ' ' + x2 + ',' + y2 + ' ' + x1 + ',' + y2, {fill: fill});
             
-            //graphLayer.circle(x1, y1, 10, {fill: 'red'});
+            // Setup Label
+            var label, format = _this.valueFormat;
+            if (this.valueType === "number") {
+              label = nformat(value, format.pattern, format.locale);
+            } else if (this.valueType === "date") {
+              label = dformat(value, format.pattern, format.locale);
+            } else {
+              label = value;
+            }
+            
+            var text = graphLayer.create("text", {
+              x: x + w / 2, 
+              y: y + h / 2,
+              dy: "0.4em",
+              textAnchor: 'middle',
+            }).append(document.createTextNode(label)).appendTo(graphLayer);
+            
+            var bounds = text.bbox();
+            if (bounds.x < x1 || bounds.x + bounds.width > x2 || bounds.y < y2 || bounds.y + bounds.height > y1) {
+              text.remove();
+            } else {
+              textColor = text.css('fill');
+              var ld = luma(fill) - luma(textColor);
+              if (ld < 92) {
+                // If contrast is too small, use bright color
+                text.css('fill', '#fff');
+              }
+            }
+            
+            valueIndex++;
             
           }
           
-          valueIndex++;
           
+            
         }
-        /*
-        graphLayer.graph(points, {
-          stroke: options.colors[valueIndex % options.colors.length],
-          strokeWidth: 1.5
-        });
-        */
-       
+        
+        // Reset step
+        currentNumberOfRows = 0;
+        currentTotals = [];
         
       }
-    }
-    if (step) {
-      count = 0;
-      sum = {};
     }
   }
 });
@@ -854,12 +940,44 @@ Object.defineProperties(ColumnChart.prototype, {
   },
   categoryGridLines: {
     value: false
-  }
+  },
+  stacked: {
+    value: false
+  },
+  valueRange: {
+    get: function() {
+      if (!this.dataTable) {
+        return;
+      }
+      var
+        dataTable = this.dataTable,
+        result = {min: 0, max: 0},
+        columnIndex,
+        categoryIndex = this.categoryIndex,
+        range;
+      if (dataTable) {
+        for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
+          if (columnIndex !== categoryIndex) {
+            range = dataTable.getColumnRange(columnIndex);
+            if (this.stacked) {
+              result.min+= range.min < 0 ? range.min : 0;
+              result.max+= range.max >= 0 ? range.max : 0;
+            } else {
+              result.min = typeof result.min === 'undefined' ? range.min : Math.min(result.min, range.min);
+              result.max = typeof result.max === 'undefined' ? range.max : Math.max(result.max, range.max);
+            }
+          }
+        };
+      }
+      return result;
+    }
+  },
+  
 });
 
 
 module.exports = ColumnChart;
-},{"../../vendor/visualist/src/visualist":21,"../utils/dticks":14,"../utils/nticks":15,"./cartesianchart":5}],8:[function(require,module,exports){
+},{"../../vendor/nformat/src/nformat":22,"../../vendor/visualist/src/visualist":23,"../utils/dticks":15,"../utils/luma":16,"../utils/nticks":17,"./cartesianchart":5}],8:[function(require,module,exports){
 var _v = require("../../vendor/visualist/src/visualist");
 
 var CartesianChart = require('./CartesianChart');
@@ -949,7 +1067,7 @@ _v.extend(LineChart.prototype, {
 });
 
 module.exports = LineChart;
-},{"../../vendor/visualist/src/visualist":21,"./CartesianChart":2}],9:[function(require,module,exports){
+},{"../../vendor/visualist/src/visualist":23,"./CartesianChart":2}],9:[function(require,module,exports){
 var
   _v = require("../../vendor/visualist/src/visualist"),
   nformat = require("../../vendor/nformat/src/nformat"),
@@ -1017,7 +1135,8 @@ _v.extend(PieChart.prototype, {
       // Column based values
       for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
         columnType = dataTable.getColumnType(columnIndex);
-        if (columnType === 'number') {
+        // Select numbers, exclude category axis
+        if (dataTable.getColumnType(columnIndex) === 'number' && (!hasColumnLabels(dataTable) || dataTable.getColumnLabel(columnIndex))) {
           value = dataTable.getColumnAverage(columnIndex);
           pattern = dataTable.getColumnPattern(columnIndex);
           locale = dataTable.getColumnLocale(columnIndex);
@@ -1090,6 +1209,16 @@ function getTypeOfData(dataTable) {
   return 0;
 }
 
+function hasColumnLabels(dataTable) {
+  // Column based values
+  for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
+    if (dataTable.getColumnType(columnIndex) === 'number') {
+      return true;
+    }
+  }
+  return false;
+}
+
 Object.defineProperties(PieChart.prototype, {
   
   legendItems: {
@@ -1106,10 +1235,12 @@ Object.defineProperties(PieChart.prototype, {
         
         
       if (dataTable) {
+        
         if (type === 0) {
+          
           // Column based values
           for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
-            if (dataTable.getColumnType(columnIndex) === 'number') {
+            if (dataTable.getColumnType(columnIndex) === 'number' && (!hasColumnLabels(dataTable) || dataTable.getColumnLabel(columnIndex))) {
               result.push({label: dataTable.getColumnLabel(columnIndex), bullet: { fill: options.colors[valueIndex % options.colors.length] } });
               valueIndex++;
             }
@@ -1143,7 +1274,31 @@ Object.defineProperties(PieChart.prototype, {
 });
 
 module.exports = PieChart;
-},{"../../vendor/dformat/src/dformat":17,"../../vendor/nformat/src/nformat":20,"../../vendor/visualist/src/visualist":21,"../utils/round":16,"./visualchart":11}],10:[function(require,module,exports){
+},{"../../vendor/dformat/src/dformat":19,"../../vendor/nformat/src/nformat":22,"../../vendor/visualist/src/visualist":23,"../utils/round":18,"./visualchart":12}],10:[function(require,module,exports){
+var _v = require("../../vendor/visualist/src/visualist");
+var nticks = require("../utils/nticks");
+var dticks = require("../utils/dticks");
+var ColumnChart = require('./columnchart');
+
+function StackedColumnChart() {
+  ColumnChart.apply(this, arguments);
+}
+
+StackedColumnChart.prototype = Object.create(ColumnChart.prototype);
+
+_v.extend(ColumnChart.prototype, {
+  defaults: _v.extend(true, {}, ColumnChart.prototype.defaults, {
+  })
+});
+
+Object.defineProperties(StackedColumnChart.prototype, {
+  stacked: {
+    value: true
+  }
+});
+
+module.exports = StackedColumnChart;
+},{"../../vendor/visualist/src/visualist":23,"../utils/dticks":15,"../utils/nticks":17,"./columnchart":7}],11:[function(require,module,exports){
 var _v = require("../../vendor/visualist/src/visualist");
 
 var BaseChart = require('./basechart');
@@ -1297,7 +1452,7 @@ Object.defineProperties(TableChart.prototype, {
 });
 
 module.exports = TableChart;
-},{"../../vendor/visualist/src/visualist":21,"./basechart":4}],11:[function(require,module,exports){
+},{"../../vendor/visualist/src/visualist":23,"./basechart":4}],12:[function(require,module,exports){
 var _v = require("../../vendor/visualist/src/visualist");
 
 var
@@ -1523,7 +1678,7 @@ Object.defineProperties(VisualChart.prototype, {
 });
 
 module.exports = VisualChart;
-},{"../../vendor/visualist/src/visualist":21,"../utils/round":16,"./basechart":4}],12:[function(require,module,exports){
+},{"../../vendor/visualist/src/visualist":23,"../utils/round":18,"./basechart":4}],13:[function(require,module,exports){
 var
   lovechart = require('./chartr'),
   plugin = 'chartr';
@@ -1539,7 +1694,7 @@ module.exports = jQuery.fn[plugin] = function(options) {
     return $(this);
   });
 };
-},{"./chartr":1}],13:[function(require,module,exports){
+},{"./chartr":1}],14:[function(require,module,exports){
 var
   nformat = require("../../vendor/nformat/src/nformat"),
   dformat = require("../../vendor/dformat/src/dformat");
@@ -1576,18 +1731,21 @@ function DataTable(data) {
   };
   
   this.getColumnRange = function(columnIndex, rowIndexStart, rowIndexEnd) {
+    var columnIndices = columnIndex instanceof Array ? columnIndex : [columnIndex];
     if (this.getColumnType(columnIndex) === 'string') {
       return {min: this.getValue(0, columnIndex), max: this.getValue(this.getNumberOfRows() - 1, columnIndex)};
     }
     rowIndexStart = rowIndexStart ? rowIndexStart : 0;
     rowIndexEnd = rowIndexEnd ? rowIndexEnd : this.getNumberOfRows() - 1;
-    var value, min = null, max = null;
+    var dataTable = this, value, min = null, max = null;
     for (rowIndex = rowIndexStart; rowIndex <= rowIndexEnd; rowIndex++) {
-      value = this.getValue(rowIndex, columnIndex);
-      if (typeof value !== 'undefined' && value !== null && value.valueOf && (typeof value !== 'string' || value)) {
-        min = min === null || value.valueOf() < min.valueOf() ? value : min;
-        max = max === null || value.valueOf() > max.valueOf() ? value : max;
-      }
+      columnIndices.forEach(function(columnIndex) {
+        value = dataTable.getValue(rowIndex, columnIndex);
+        if (typeof value !== 'undefined' && value !== null && value.valueOf && (typeof value !== 'string' || value)) {
+          min = min === null || value.valueOf() < min.valueOf() ? value : min;
+          max = max === null || value.valueOf() > max.valueOf() ? value : max;
+        }
+      });
     }
     return {min: min, max: max};
   };
@@ -1834,7 +1992,7 @@ DataTable.fromArray = function(data, options) {
 };
   
 module.exports = DataTable;
-},{"../../vendor/dformat/src/dformat":17,"../../vendor/nformat/src/nformat":20}],14:[function(require,module,exports){
+},{"../../vendor/dformat/src/dformat":19,"../../vendor/nformat/src/nformat":22}],15:[function(require,module,exports){
 var nticks = require('./nticks');
 
 var
@@ -2003,7 +2161,28 @@ var
   };
   
 module.exports = dateTicks;
-},{"./nticks":15}],15:[function(require,module,exports){
+},{"./nticks":17}],16:[function(require,module,exports){
+// http://stackoverflow.com/questions/12043187/how-to-check-if-hex-color-is-too-black 
+function luma(color) {
+  var r, g, b, c, rgb, result;
+  var match = color.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+  if (match) {
+    r = parseFloat(match[1]);
+    g = parseFloat(match[2]);
+    b = parseFloat(match[3]);
+  } else {
+    c = color.replace(/^#/, '');      // strip #
+    rgb = parseInt(c, 16);   // convert rrggbb to decimal
+    r = (rgb >> 16) & 0xff;  // extract red
+    g = (rgb >>  8) & 0xff;  // extract green
+    b = (rgb >>  0) & 0xff;  // extract blue
+  }
+  result = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+  return result;
+}
+
+module.exports = luma;
+},{}],17:[function(require,module,exports){
 var ln10 = Math.log(10);
 var calcStepSize = function(range, targetSteps)
 {
@@ -2077,9 +2256,9 @@ var
     outer = typeof outer === "undefined" ? false : outer;
     
     var
-      diff = max - min,
-      //range = niceFraction(diff),
-      //interval = niceFraction(range / count),
+      diff = max - min;
+      
+    var 
       interval = calcStepSize(diff, count),
       nmin = min - min % interval,
       nmax = max - max % interval,
@@ -2089,7 +2268,7 @@ var
       i;
   
    if (outer) {
-        
+      
       if (nmin > min) {
         nmin-= interval;
       }
@@ -2118,7 +2297,7 @@ var
   };
   
 module.exports = numTicks;
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = function round(num, digits) {
   digits = typeof digits === 'number' ? digits : 1;
   var value = parseFloat(num);
@@ -2128,7 +2307,7 @@ module.exports = function round(num, digits) {
   }
   return num;
 };
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var i18n = require("./locales/all");
 
 function cartesianProductOf(array, unique) {
@@ -2584,7 +2763,7 @@ dformat.detect = function(date, string) {
 
 
 module.exports = dformat;
-},{"./locales/all":18}],18:[function(require,module,exports){
+},{"./locales/all":20}],20:[function(require,module,exports){
 module.exports = {
   "en": {
     "month": {
@@ -3511,7 +3690,7 @@ module.exports = {
     ]
   }
 };
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports = {
   "en": {
     "args": [
@@ -3566,7 +3745,7 @@ module.exports = {
     ]
   }
 };
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var i18n = require("./locales/all");
 
 
@@ -3869,7 +4048,7 @@ nformat.detect = function(number, string, pattern, locale) {
 
 
 module.exports = nformat;
-},{"./locales/all":19}],21:[function(require,module,exports){
+},{"./locales/all":21}],23:[function(require,module,exports){
 var _v = (function() {
   
   
@@ -4790,4 +4969,4 @@ var _v = (function() {
 }());
 
 module.exports = _v;
-},{}]},{},[12]);
+},{}]},{},[13]);

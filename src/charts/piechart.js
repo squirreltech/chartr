@@ -65,7 +65,8 @@ _v.extend(PieChart.prototype, {
       // Column based values
       for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
         columnType = dataTable.getColumnType(columnIndex);
-        if (columnType === 'number') {
+        // Select numbers, exclude category axis
+        if (dataTable.getColumnType(columnIndex) === 'number' && (!hasColumnLabels(dataTable) || dataTable.getColumnLabel(columnIndex))) {
           value = dataTable.getColumnAverage(columnIndex);
           pattern = dataTable.getColumnPattern(columnIndex);
           locale = dataTable.getColumnLocale(columnIndex);
@@ -138,6 +139,16 @@ function getTypeOfData(dataTable) {
   return 0;
 }
 
+function hasColumnLabels(dataTable) {
+  // Column based values
+  for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
+    if (dataTable.getColumnType(columnIndex) === 'number') {
+      return true;
+    }
+  }
+  return false;
+}
+
 Object.defineProperties(PieChart.prototype, {
   
   legendItems: {
@@ -154,10 +165,12 @@ Object.defineProperties(PieChart.prototype, {
         
         
       if (dataTable) {
+        
         if (type === 0) {
+          
           // Column based values
           for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
-            if (dataTable.getColumnType(columnIndex) === 'number') {
+            if (dataTable.getColumnType(columnIndex) === 'number' && (!hasColumnLabels(dataTable) || dataTable.getColumnLabel(columnIndex))) {
               result.push({label: dataTable.getColumnLabel(columnIndex), bullet: { fill: options.colors[valueIndex % options.colors.length] } });
               valueIndex++;
             }

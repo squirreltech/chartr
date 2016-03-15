@@ -1,5 +1,5 @@
 var
-  welcomeFile = "junk_food.csv",
+  welcomeFile = "csv/test19.csv",
   pkgName = 'chartr',
   dataArray = [],
   $embedTypeOptions,

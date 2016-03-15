@@ -71,9 +71,9 @@ var
     outer = typeof outer === "undefined" ? false : outer;
     
     var
-      diff = max - min,
-      //range = niceFraction(diff),
-      //interval = niceFraction(range / count),
+      diff = max - min;
+      
+    var 
       interval = calcStepSize(diff, count),
       nmin = min - min % interval,
       nmax = max - max % interval,
@@ -83,7 +83,7 @@ var
       i;
   
    if (outer) {
-        
+      
       if (nmin > min) {
         nmin-= interval;
       }

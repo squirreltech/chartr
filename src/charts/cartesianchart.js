@@ -78,7 +78,6 @@ _v.extend(CartesianChart.prototype, {
     categoryTicks.forEach(function(tick, index) {
       var tickColor = categoryType === 'number' && tick === 0 ? 0.75 : 0.25;
       var tickWidth = (flipAxes ? ch : cw) / (categoryTicks.length);
-      
       var normalizedCategoryValue = (tick - categoryMin) / (categoryMax - categoryMin);
       
       var x1;
@@ -222,8 +221,8 @@ _v.extend(CartesianChart.prototype, {
       var textAnchor = flipAxes ? 'middle' : 'end'; 
       
       var text = gridLayer.create("text", {
-        x: Math.round(labelX), 
-        y: Math.round(labelY),
+        x: labelX, 
+        y: labelY,
         dy: "0.4em",
         textAnchor: textAnchor
       }).append(document.createTextNode(label));
@@ -305,14 +304,21 @@ Object.defineProperties(CartesianChart.prototype, {
     configurable: true,
     get: function() {
       var
+        maxCount = 10;
         range = this.categoryRange,
         type = this.categoryType,
         min = range.min,
         max = range.max,
-        count = Math.min(10, this.dataTable.getNumberOfRows()),
+        count = Math.min(maxCount, this.dataTable.getNumberOfRows()),
         outer = false;
-      if (type === 'number') {
-        return nticks(min, max, count, outer);
+      if (type === 'number' && this.dataTable.getNumberOfRows() < maxCount) {
+        var ticks = [];
+        var rows = this.dataTable.getNumberOfRows();
+        for (var i = 0; i < rows; i++) {
+          var value = this.dataTable.getValue(i, this.categoryIndex);
+          ticks.push(value);
+        };
+        return ticks;
       } else if (type === 'date') {
         return dticks(min, max, count, outer);
       } else if (type === 'string') {
@@ -320,7 +326,9 @@ Object.defineProperties(CartesianChart.prototype, {
         return (Array.apply(null, {length: this.dataTable.getNumberOfRows()}).map(Number.call, Number)).map(function(tick) {
           return Math.floor(tick);
         });
-      }
+      } else if (type === 'number') {
+        return nticks(min, max, count, outer);
+      } 
     }
   },
   valueRange: {
@@ -335,11 +343,25 @@ Object.defineProperties(CartesianChart.prototype, {
         categoryIndex = this.categoryIndex,
         range;
       if (dataTable) {
+        return dataTable.getColumnRange(this.valueIndices);
+      }
+      return null;
+    }
+  },
+  valueIndices: {
+    get: function() {
+      if (!this.dataTable) {
+        return;
+      }
+      var
+        dataTable = this.dataTable,
+        result = [],
+        columnIndex,
+        categoryIndex = this.categoryIndex;
+      if (dataTable) {
         for (columnIndex = 0; columnIndex < dataTable.getNumberOfColumns(); columnIndex++) {
           if (columnIndex !== categoryIndex) {
-            range = dataTable.getColumnRange(columnIndex);
-            result.min = typeof result.min === 'undefined' ? range.min : Math.min(result.min, range.min);
-            result.max = typeof result.max === 'undefined' ? range.max : Math.max(result.max, range.max);
+            result.push(columnIndex);
           }
         };
       }
